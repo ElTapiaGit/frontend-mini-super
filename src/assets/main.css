@@ -1,0 +1,71 @@
+/*configuracion de temas */
+@import "tailwindcss";
+
+@theme {
+  /* =========================================
+     PALETA DE COLORES - ERP MINISUPER
+     Basado en el sistema de diseño M3
+     ========================================= */
+
+  /* --- Colores Principales (Marca y Estructura) --- */
+  --color-primary: #000000; /* Elementos de marca puros, botones primarios absolutos */
+  --color-on-primary: #ffffff; /* Texto e iconos sobre fondos primary */
+  --color-primary-container: #131b2e; /* Fondos de alto contraste (Ej. Sidebar, tarjetas destacadas) */
+  --color-on-primary-container: #7c839b; /* Texto secundario apagado sobre primary-container */
+
+  /* --- Colores Secundarios (Éxito, Dinero, Acciones Positivas) --- */
+  --color-secondary: #006c49; /* Verde esmeralda. Uso: Botones de venta, KPIs de ingresos, gráficos de subida */
+  --color-on-secondary: #ffffff; /* Texto sobre fondos secondary */
+  --color-secondary-container: #6cf8bb; /* Fondos suaves para insignias o tags de "Activo" o "Completado" */
+  --color-on-secondary-container: #00714d; /* Texto oscuro legible sobre secondary-container */
+
+  /* --- Colores Terciarios (Advertencias, Alertas medias) --- */
+  --color-tertiary-fixed-dim: #ffb95f; /* Naranja/Ámbar. Uso: Alertas de stock bajo, advertencias no críticas */
+  --color-on-tertiary-container: #b87500; /* Texto para insignias de advertencia */
+
+  /* --- Colores de Error (Críticos, Peligro) --- */
+  --color-error: #ba1a1a; /* Rojo. Uso: Stock agotado, acciones de eliminar, KPIs negativos */
+  --color-on-error: #ffffff; /* Texto sobre fondos de error */
+  --color-error-container: #ffdad6; /* Fondos suaves para mensajes de error o banners */
+
+  /* --- Colores de Superficie (Fondos, Tarjetas, Modales) --- */
+  --color-background: #f7f9fb; /* Fondo general de toda la aplicación (Gris muy claro) */
+  --color-surface: #f7f9fb; /* Fondo base de las tarjetas (Glassmorphism) y modales */
+  --color-surface-variant: #e0e3e5; /* Bordes, líneas divisorias, inputs inactivos y hovers suaves */
+  --color-on-surface: #191c1e; /* Texto principal oscuro (Títulos, datos numéricos fuertes) */
+  --color-on-surface-variant: #45464d; /* Texto secundario (Subtítulos, placeholders, descripciones de tablas) */
+
+  /* --- Tipografía --- */
+  --font-headline: "Manrope", sans-serif; /* Títulos de página, cifras de KPIs, encabezados fuertes */
+  --font-body: "Inter", sans-serif; /* Texto general, contenido de tablas, párrafos */
+  --font-label: "Inter", sans-serif; /* Etiquetas, botones pequeños, textos tracking-widest uppercase */
+}
+
+/* =========================================
+   CLASES DE UTILIDAD PERSONALIZADAS
+   ========================================= */
+
+@utility glass-card {
+  /* Efecto esmerilado para las tarjetas del Dashboard y modales */
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+@utility custom-scrollbar {
+  /* Scrollbar minimalista que no rompe el diseño en tablas largas */
+  &::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-surface-variant);
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--color-on-surface-variant);
+  }
+}
