@@ -10,5 +10,11 @@ export const inventoryService = {
     async getStockMovements() {
         const response = await api.get('/stock');
         return response.data;
+    },
+
+    // Registrar un ajuste manual
+    async createStockMovement(data) {
+        const response = await api.post('/stock', data);
+        return response.data;
     }
 };
