@@ -26,30 +26,31 @@
             
                         <div>
                             <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1">Categoría</label>
-                            <select v-model="formData.category_id" :disabled="isReadOnly" required class="w-full bg-surface-container-highest border-none rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-primary outline-none transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed">
+                            <select v-model="formData.category_id" :disabled="isReadOnly || mode === 'edit'" required class="w-full bg-surface-container-highest border-none rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-primary outline-none transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed">
                                 <option value="" disabled>Seleccione...</option>
                                 <option v-for="cat in categories" :key="cat.id" :value="cat.id">
                                     {{ cat.name }}
                                 </option>
                             </select>
+                            <span v-if="mode === 'edit'" class="text-[9px] text-on-surface-variant font-medium mt-1">No modificable</span>
                         </div>
                     </div>
 
                     <div>
                         <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1">Descripción</label>
-                        <textarea v-model="formData.description" :disabled="isReadOnly" rows="2" class="w-full bg-surface-container-highest border-none rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-primary outline-none transition-all resize-none disabled:opacity-60" placeholder="Ej. Bebida gaseosa..."></textarea>
+                        <textarea v-model="formData.description" :disabled="isReadOnly || mode === 'edit'" rows="2" class="w-full bg-surface-container-highest border-none rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-primary outline-none transition-all resize-none disabled:opacity-60" placeholder="Ej. Bebida gaseosa..."></textarea>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                             <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1">Stock</label>
-                            <input v-model="formData.stock" :disabled="isReadOnly || mode === 'edit'" type="number" min="0" required class="w-full bg-surface-container-highest border-none rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-primary outline-none transition-all disabled:opacity-60" placeholder="0" />
+                            <input v-model="formData.stock" :disabled="isReadOnly" type="number" min="0" required class="w-full bg-surface-container-highest border-none rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-primary outline-none transition-all disabled:opacity-60" placeholder="0" />
                             <span v-if="mode === 'edit'" class="text-[9px] text-on-surface-variant font-medium">Editar desde módulo de ajustes</span>
                         </div>
             
                         <div>
                             <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1">Costo (Bs.)</label>
-                            <input v-model="formData.cost" :disabled="isReadOnly" type="number" step="0.01" min="0.01" required class="w-full bg-surface-container-highest border-none rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-primary outline-none transition-all disabled:opacity-60" placeholder="0.00" />
+                            <input v-model="formData.cost" :disabled="isReadOnly || mode === 'edit'" type="number" step="0.01" min="0.01" required class="w-full bg-surface-container-highest border-none rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-primary outline-none transition-all disabled:opacity-60" placeholder="0.00" />
                         </div>
 
                         <div>
@@ -81,7 +82,7 @@ const props = defineProps({
     isOpen: Boolean,
     mode: { type: String, default: 'create' }, // 'create', 'edit', 'view'
     product: Object, // Datos del producto para llenar el form
-    categories: Array, // Lista de categorías para el <select>
+    categories: Array, // Lista de categorias para el <select>
     isLoading: Boolean,
     errorMessage: String
 });
@@ -121,16 +122,28 @@ watch(() => props.isOpen, (newVal) => {
 
 const handleSubmit = () => {
     if (isReadOnly.value) return;
+
+    let payload = {};
   
-    // Asegurarnos de que los valores numéricos se envíen como números y no strings
-    const payload = {
-        ...formData.value,
-        category_id: parseInt(formData.value.category_id),
-        stock: parseInt(formData.value.stock),
-        price: parseFloat(formData.value.price),
-        cost: parseFloat(formData.value.cost)
-    };
-  
+    if (props.mode === 'create') {
+        // Al crear, enviamos todo
+        payload = {
+            name: formData.value.name,
+            description: formData.value.description,
+            category_id: parseInt(formData.value.category_id),
+            stock: parseInt(formData.value.stock),
+            price: parseFloat(formData.value.price),
+            cost: parseFloat(formData.value.cost)
+        };
+    } else if (props.mode === 'edit') {
+        // Al editar, SOLO enviamos lo que la API permite (name, price, stock)
+        payload = {
+            name: formData.value.name,
+            price: parseFloat(formData.value.price),
+            stock: parseInt(formData.value.stock)
+        };
+    }
+    
     emit('save', payload);
 };
 </script>
