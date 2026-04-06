@@ -10,7 +10,7 @@ export const useInventoryStore = defineStore('inventory', {
         },
         valuationByCategory: [],
         lowStockItems: [],  // Solo contendra productos con stock <= 5
-        movements: [],     // Historial de auditoria
+        movements: [],     // Historial de auditoria movimientos
         loading: false,
         error: null
     }),
@@ -33,15 +33,35 @@ export const useInventoryStore = defineStore('inventory', {
                 this.loading = false;
             }
         },
-
+        
+        // obtener movimientos
         async fetchMovements() {
+            this.loading = true;
             try {
                 const response = await inventoryService.getStockMovements();
                 if (response.success) {
                     this.movements = response.data;
                 }
             } catch (error) {
-                console.error("Error en auditoría:", error);
+                console.error("Error al cargar historial:", error);
+            } finally {
+                this.loading = false;
+            }
+        },
+
+        // Guardar ajuste manual
+        async createMovement(payload) {
+            this.loading = true;
+            try {
+                const response = await inventoryService.createStockMovement(payload);
+                // Si fue exitoso, recargamos el historial automáticamente
+                await this.fetchMovements(); 
+                return { success: true };
+            } catch (error) {
+                // Capturamos el error (ej. "No puedes sacar más de lo que existe en bodega")
+                return { success: false, message: error.response?.data?.message || 'Error al registrar el ajuste.' };
+            } finally {
+                this.loading = false;
             }
         }
     }
