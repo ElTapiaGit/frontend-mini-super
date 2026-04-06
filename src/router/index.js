@@ -31,6 +31,12 @@ const router = createRouter({
       component: () => import('../views/inventory/ProductsView.vue'),
       meta: { requiresAuth: true } // Accesible para Admin, Gerente y Empleado
     },
+    {
+      path: '/categories',
+      name: 'categories',
+      component: () => import('../views/inventory/CategoriesView.vue'),
+      meta: { requiresAuth: true }
+    },
   ]
 })
 
