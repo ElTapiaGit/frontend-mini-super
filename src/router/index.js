@@ -24,7 +24,13 @@ const router = createRouter({
       name: 'pos',
       component: () => import('../views/pos/PosView.vue'),
       meta: { requiresAuth: true, role: 'Empleado' }
-    }
+    },
+    {
+      path: '/products',
+      name: 'products',
+      component: () => import('../views/inventory/ProductsView.vue'),
+      meta: { requiresAuth: true } // Accesible para Admin, Gerente y Empleado
+    },
   ]
 })
 
