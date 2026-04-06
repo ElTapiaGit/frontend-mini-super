@@ -43,6 +43,12 @@ const router = createRouter({
       component: () => import('../views/inventory/StockLogsView.vue'),
       meta: { requiresAuth: true }
     },
+    {
+      path: '/reports',
+      name: 'reports',
+      component: () => import('../views/reports/ReportsView.vue'),
+      meta: { requiresAuth: true } // Solo Admin y Gerente (lo validaremos en el layout o router luego)
+    },
   ]
 })
 
